@@ -5,7 +5,7 @@ import Wrapper from './Wrapper';
 function App() {
   return (
     <Wrapper>
-      <Hello name="vul" color="pink"/>
+      <Hello name="vul" color="pink" isSpecial/>
       <Hello color="blue"/>
     </Wrapper>
   );
