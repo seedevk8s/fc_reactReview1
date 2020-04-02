@@ -9,6 +9,10 @@ function User({ user, onRemove, onToggle }) {
     /*  useEffect 에서는 함수를 반환 할 수 있는데 이를 cleanup 함수라고 부릅니다. 
     cleanup 함수는 useEffect 에 대한 뒷정리를 해준다고 이해하시면 되는데요, 
     deps 가 비어있는 경우에는 컴포넌트가 사라질 때 cleanup 함수가 호출됩니다. */
+    /* useEffect 안에서 사용하는 상태나, props 가 있다면, useEffect 의 deps 에 넣어주어야 합니다. 
+    그렇게 하는게, 규칙입니다. */
+    /* 만약 useEffect 안에서 사용하는 상태나 props 를 deps 에 넣지 않게 된다면 
+    useEffect 에 등록한 함수가 실행 될 때 최신 props / 상태를 가르키지 않게 됩니다. */
     useEffect(() => {
         console.log('컴포넌트가 화면에 나타남');
         /*   주로, 마운트 시에 하는 작업들은 다음과 같은 사항들이 있습니다.
@@ -18,14 +22,21 @@ function User({ user, onRemove, onToggle }) {
         라이브러리 사용 (D3, Video.js 등...)
         setInterval 을 통한 반복작업 혹은 setTimeout 을 통한 작업 예약 */
 
+        console.log(user);
+
         return () => {
             console.log('컴포넌트가 화면에서 사라짐');
             /*  언마운트 시에 하는 작업들은 다음과 같은 사항이 있습니다.
 
             setInterval, setTimeout 을 사용하여 등록한 작업들 clear 하기 (clearInterval, clearTimeout)
             라이브러리 인스턴스 제거 */
+
+            console.log(user);
         };
-    }, []);
+    }, [user]);             /* deps 에 특정 값을 넣게 된다면, 
+                            컴포넌트가 처음 마운트 될 때에도 호출이 되고, 지정한 값이 바뀔 때에도 호출이 됩니다. 
+                            그리고, deps 안에 특정 값이 있다면 
+                            언마운트시에도 호출이되고, 값이 바뀌기 직전에도 호출이 됩니다. */
 
 
 
