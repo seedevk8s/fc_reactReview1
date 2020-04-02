@@ -23,17 +23,20 @@ function App() {
     {
         id: 1,
         username: 'velopert',
-        email: 'public.velopert@gmail.com'            
+        email: 'public.velopert@gmail.com', 
+        active: true           
     },
     {
         id: 2,
         username: 'tester',
-        email: 'tester@example.com'            
+        email: 'tester@example.com',
+        active: false               
     },
     {
         id: 3,
         username: 'liz',
-        email: 'liz@example.com'            
+        email: 'liz@example.com',
+        active: false               
     }
 ]);  
 
@@ -67,6 +70,12 @@ filter 배열 내장 함수를 사용하는것이 가장 편합니다.
         setUsers(users.filter(user => user.id !== id));
   };
 
+  const onToggle = id => {
+    setUsers(
+      users.map(user => user.id === id ? {...user, active: !user.active} : user )
+    )
+  };
+
   return (
     <>
       <CreateUser 
@@ -75,7 +84,7 @@ filter 배열 내장 함수를 사용하는것이 가장 편합니다.
         onChange={onChange}
         onCreate={onCreate}
       />
-      <UserList users={users} onRemove={onRemove}/>      
+      <UserList users={users} onRemove={onRemove} onToggle={onToggle}/>      
     </>
   );
 }
