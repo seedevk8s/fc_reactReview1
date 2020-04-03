@@ -25,7 +25,7 @@ function App() {
       ...inputs,
       [name]: value
     });
-  }, [inputs]);
+  }, []);
 
   const [users, setUsers] = useState([
     {
@@ -57,14 +57,14 @@ function App() {
       username,
       email
     };
-    setUsers(users.concat(user));
+    setUsers(users => users.concat(user));
 
     setInputs({
       username: '',
       email: ''
     });
     nextId.current += 1;
-  }, [users, username, email]);
+  }, [username, email]);
 
 /* 배열에 있는 항목을 제거할 때에는, 
 추가할떄와 마찬가지로 불변성을 지켜가면서 업데이트를 해주어야 합니다.
@@ -75,14 +75,14 @@ filter 배열 내장 함수를 사용하는것이 가장 편합니다.
   const onRemove = useCallback( id => {
     // user.id 가 파라미터로 일치하지 않는 원소만 추출해서 새로운 배열을 만듬
     // = user.id 가 id 인 것을 제거함
-        setUsers(users.filter(user => user.id !== id));
-  }, [users]);
+        setUsers(users => users.filter(user => user.id !== id));
+  }, []);
 
   const onToggle = useCallback( id => {
     setUsers(
-      users.map(user => user.id === id ? {...user, active: !user.active} : user )
+      users => users.map(user => user.id === id ? {...user, active: !user.active} : user )
     )
-  }, [users]);
+  }, []);
 
   /* useMemo 의 첫번째 파라미터에는 어떻게 연산할지 정의하는 함수를 넣어주면 되고 
   두번째 파라미터에는 deps 배열을 넣어주면 되는데, 
@@ -106,3 +106,6 @@ filter 배열 내장 함수를 사용하는것이 가장 편합니다.
 }
 
 export default App;
+
+/* 함수형 업데이트를 하게 되면, 
+setUsers 에 등록하는 콜백함수의 파라미터에서 최신 users 를 참조 할 수 있기 때문에 deps 에 users 를 넣지 않아도 된답니다. */
