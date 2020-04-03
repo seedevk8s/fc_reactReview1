@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-function User({ user, onRemove, onToggle }) {
+const User = React.memo( function User({ user, onRemove, onToggle }) {
 
     /*  useEffect 를 사용 할 때에는 첫번째 파라미터에는 함수, 
     두번째 파라미터에는 의존값이 들어있는 배열 (deps)을 넣습니다. */
@@ -39,9 +39,6 @@ function User({ user, onRemove, onToggle }) {
                             언마운트시에도 호출이되고, 값이 바뀌기 직전에도 호출이 됩니다. */
 
 
-
-
-
      return (
         <div>
             <b style={{
@@ -56,7 +53,7 @@ function User({ user, onRemove, onToggle }) {
             호출해주어야 합니다. */}
         </div>
     ) 
-}
+});
 
 /* 이 onRemove 함수는 UserList 에서도 전달 받을것이며, 
 이를 그대로 User 컴포넌트에게 전달해줄것입니다. */
@@ -79,4 +76,4 @@ function UserList({ users, onRemove, onToggle }) {
 
 }
 
-export default UserList;
+export default React.memo(UserList);
