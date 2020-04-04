@@ -1,6 +1,12 @@
+/* 컴포넌트에서 관리하는 값이 딱 하나고, 그 값이 단순한 숫자, 문자열 또는 boolean 값이라면 
+확실히 useState 로 관리하는게 편할 것입니다. */
+/* 만약에 컴포넌트에서 관리하는 값이 여러개가 되어서 상태의 구조가 복잡해진다면 
+useReducer로 관리하는 것이 편해질 수도 있습니다. */
+
 import React, { useRef, useState, useMemo, useCallback, useReducer } from 'react';
 import UserList from './UserList';
 import CreateUser from './CreateUser';
+import useInputs from './hooks/useInputs';
 
 function countActiveUsers(users) {
   console.log('활성 사용자 수를 세는 중....');
@@ -8,11 +14,13 @@ function countActiveUsers(users) {
 }
 
 const initialState = {
+  /* 
   inputs: {
     username: '',
     email: ''      
   },
-  
+   */
+
   users: [
     {
         id: 1,
@@ -40,6 +48,7 @@ const initialState = {
 reducer 함수에서 새로운 상태를 만들 때에는 불변성을 지켜주어야 하기 때문에 spread 연산자를 사용해주었습니다. */
 function reducer(state, action) {
   switch (action.type) {
+    /* 
     case 'CHANGE_INPUT':
       return {
         ...state,
@@ -48,9 +57,10 @@ function reducer(state, action) {
           [action.name]: action.value
         }
       };
+       */
     case 'CREATE_USER':
       return {
-        inputs: initialState.inputs,
+        //inputs: initialState.inputs,
         users: state.users.concat(action.user)
       };
     case 'TOGGLE_USER':
@@ -179,8 +189,15 @@ filter 배열 내장 함수를 사용하는것이 가장 편합니다.
 
   /* state 에서 필요한 값들을 비구조화 할당 문법을 사용하여 추출하여 각 컴포넌트에게 전달해주세요. */
   const { users } = state;
+  /* 
   const { username, email } = state.inputs;
+   */
+  const [{ username, email }, onChange, reset] = useInputs({
+    username: '',
+    email: ''
+  });
 
+  /* 
   const onChange = useCallback( e => {
     const { name, value } = e.target;
     dispatch({
@@ -189,6 +206,7 @@ filter 배열 내장 함수를 사용하는것이 가장 편합니다.
       value
     })
   }, []);  
+  */
 
   const onCreate = useCallback( () => {
     // 배열 항목 추가
@@ -201,8 +219,9 @@ filter 배열 내장 함수를 사용하는것이 가장 편합니다.
       }
     });
 
+    reset();
     nextId.current += 1;
-  }, [username, email]);
+  }, [username, email, reset]);
 
   const onToggle = useCallback( id => {
     dispatch({
