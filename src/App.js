@@ -38,6 +38,20 @@ const initialState = {
 
 
 function reducer(state, action) {
+  switch (action.type) {
+    case 'CHANGE_INPUT':
+      return {
+        ...state,
+        inputs: {
+          ...state.inputs,
+          [action.name]: action.value
+        }
+      };
+     default:
+       return state; 
+  }
+
+
   return state;
 }
 
@@ -148,14 +162,23 @@ filter 배열 내장 함수를 사용하는것이 가장 편합니다.
   const { users } = state;
   const { username, email } = state.inputs;
 
+  const onChange = useCallback( e => {
+    const { name, value } = e.target;
+    dispatch({
+      type: 'CHANGE_INPUT',
+      name,
+      value
+    })
+  }, []);  
+
   return (
     <>
       <CreateUser 
         
         username={username}
         email={email}
-        /* 
         onChange={onChange}
+        /* 
         onCreate={onCreate}
        */
       />
