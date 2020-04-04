@@ -36,7 +36,8 @@ const initialState = {
 
 };
 
-
+/* CHANGE_INPUT 이라는 액션 객체를 사용하여 inputs 상태를 업데이트. 
+reducer 함수에서 새로운 상태를 만들 때에는 불변성을 지켜주어야 하기 때문에 spread 연산자를 사용해주었습니다. */
 function reducer(state, action) {
   switch (action.type) {
     case 'CHANGE_INPUT':
@@ -47,6 +48,11 @@ function reducer(state, action) {
           [action.name]: action.value
         }
       };
+      case 'CREATE_USER':
+        return {
+          inputs: initialState.inputs,
+          users: state.users.concat(action.user)
+        };
      default:
        return state; 
   }
@@ -157,6 +163,7 @@ filter 배열 내장 함수를 사용하는것이 가장 편합니다.
  */
 
   const [state, dispatch] = useReducer(reducer, initialState);
+  const nextId = useRef(4);
 
   /* state 에서 필요한 값들을 비구조화 할당 문법을 사용하여 추출하여 각 컴포넌트에게 전달해주세요. */
   const { users } = state;
@@ -171,6 +178,20 @@ filter 배열 내장 함수를 사용하는것이 가장 편합니다.
     })
   }, []);  
 
+  const onCreate = useCallback( () => {
+    // 배열 항목 추가
+    dispatch({
+      type: 'CREATE_USER',
+      user: {
+        id: nextId.current,
+        username,
+        email        
+      }
+    });
+
+    nextId.current += 1;
+  }, [username, email]);
+
   return (
     <>
       <CreateUser 
@@ -178,9 +199,8 @@ filter 배열 내장 함수를 사용하는것이 가장 편합니다.
         username={username}
         email={email}
         onChange={onChange}
-        /* 
         onCreate={onCreate}
-       */
+
       />
       <UserList 
           
