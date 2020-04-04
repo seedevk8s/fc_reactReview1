@@ -220,6 +220,8 @@ filter 배열 내장 함수를 사용하는것이 가장 편합니다.
     })
   }, []);  
 
+  const count = useMemo(() => countActiveUsers(users), [users] ) ;
+
   return (
     <>
       <CreateUser 
@@ -239,7 +241,7 @@ filter 배열 내장 함수를 사용하는것이 가장 편합니다.
           users={[]}
            */
       />      
-      <div>활성사용자 수 : 0</div>
+      <div>활성사용자 수 : {count}</div>
     </>
   );
 }
