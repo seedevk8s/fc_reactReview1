@@ -144,24 +144,29 @@ filter 배열 내장 함수를 사용하는것이 가장 편합니다.
 
   const [state, dispatch] = useReducer(reducer, initialState);
 
+  /* state 에서 필요한 값들을 비구조화 할당 문법을 사용하여 추출하여 각 컴포넌트에게 전달해주세요. */
+  const { users } = state;
+  const { username, email } = state.inputs;
 
   return (
     <>
       <CreateUser 
-        /* 
+        
         username={username}
         email={email}
+        /* 
         onChange={onChange}
         onCreate={onCreate}
        */
       />
       <UserList 
-          /* 
+          
           users={users} 
+          /* 
           onRemove={onRemove} 
           onToggle={onToggle}
-           */
           users={[]}
+           */
       />      
       <div>활성사용자 수 : 0</div>
     </>
