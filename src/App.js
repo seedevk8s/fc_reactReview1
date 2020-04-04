@@ -48,11 +48,23 @@ function reducer(state, action) {
           [action.name]: action.value
         }
       };
-      case 'CREATE_USER':
-        return {
-          inputs: initialState.inputs,
-          users: state.users.concat(action.user)
-        };
+    case 'CREATE_USER':
+      return {
+        inputs: initialState.inputs,
+        users: state.users.concat(action.user)
+      };
+    case 'TOGGLE_USER':
+      return {
+        ...state,
+        users: state.users.map(user =>
+          user.id === action.id ? {...user, active: !user.active} : user)
+      };
+    case 'REMOVE_USER':
+      return {
+        ...state,
+        users: state.users.filter(user => user.id != action.id)
+      }; 
+
      default:
        return state; 
   }
@@ -192,6 +204,22 @@ filter 배열 내장 함수를 사용하는것이 가장 편합니다.
     nextId.current += 1;
   }, [username, email]);
 
+  const onToggle = useCallback( id => {
+    dispatch({
+      type: 'TOGGLE_USER',
+      id
+    })
+  }, []);  
+
+  const onRemove = useCallback( id => {
+    // user.id 가 파라미터로 일치하지 않는 원소만 추출해서 새로운 배열을 만듬
+    // = user.id 가 id 인 것을 제거함
+    dispatch({
+      type: 'REMOVE_USER',
+      id
+    })
+  }, []);  
+
   return (
     <>
       <CreateUser 
@@ -205,9 +233,9 @@ filter 배열 내장 함수를 사용하는것이 가장 편합니다.
       <UserList 
           
           users={users} 
-          /* 
           onRemove={onRemove} 
           onToggle={onToggle}
+          /*           
           users={[]}
            */
       />      
