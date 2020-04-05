@@ -54,13 +54,26 @@ function reducer(state, action) {
 //     );
 // }
 
+/* 
+클래스형 컴포넌트에서는 조금 다릅니다. 
+render 함수 내부에서 선언은 할 수 있기는 있지만, 
+일반적으로 그렇게 하지는 않고 클래스 안에 커스텀 메서드를 선언합니다.
+ */
 class Counter extends Component {
+  handleInCrease() {
+    console.log('increase');
+  }
+
+  handleDecrease() {
+    console.log('decrease');
+  }
+
   render() {
     return (
     <div>
       <h1>0</h1>
-      <button>+1</button>
-      <button>-1</button>
+      <button onClick={this.handleInCrease}>+1</button>
+      <button onClick={this.handleDecrease}>-1</button>
     </div>
     );
   }
