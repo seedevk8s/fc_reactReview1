@@ -8,6 +8,23 @@ import UserList from './UserList';
 import CreateUser from './CreateUser';
 import useInputs from './hooks/useInputs';
 
+/* 리액트에서 배열이나 객체를 업데이트 해야 할 때에는 직접 수정 하면 안되고 
+불변성을 지켜주면서 업데이트를 해주어야 합니다. */
+/* 배열도 마찬가지로, push, splice 등의 함수를 사용하거나 n 번째 항목을 직접 수정하면 안되고 
+concat, filter, map 등의 함수를 사용해야 합니다. */
+/* 데이터의 구조가 조금 까다로워지면 
+불변성을 지켜가면서 새로운 데이터를 생성해내는 코드가 조금 복잡해집니다. */
+/* 이럴 때, immer 라는 라이브러리를 사용하면 코드가 훨씬 깔끔하게 구현 할 수 있답니다. */
+/* Immer 를 사용하면 우리가 상태를 업데이트 할 때, 
+불변성을 신경쓰지 않으면서 업데이트를 해주면 Immer 가 불변성 관리를 대신 해줍니다. */
+/* Immer 라이브러리는 확실히 편하기 때문에, 
+데이터의 구조가 복잡해져서 불변성을 유지하면서 업데이트하려면 코드가 복잡해지는 상황이 온다면, 
+이를 사용하는 것을 권장드립니다. */
+/* 이 라이브러리를 사용 할 땐 다음과 같이 사용합니다.
+우선 코드의 상단에서 immer 를 불러와주어야 합니다. 
+보통 produce 라는 이름으로 불러옵니다. */
+import produce from 'immer';
+
 function countActiveUsers(users) {
   console.log('활성 사용자 수를 세는 중....');
   return users.filter(user => user.active).length;
@@ -58,22 +75,40 @@ function reducer(state, action) {
         }
       };
        */
+
+      /* produce 함수를 사용 할 때에는 첫번째 파라미터에는 수정하고 싶은 상태, 
+      두번째 파라미터에는 어떻게 업데이트하고 싶을지 정의하는 함수를 넣어줍니다.
+      두번째 파라미터에 넣는 함수에서는 불변성에 대해서 신경쓰지 않고 
+      그냥 업데이트 해주면 다 알아서 해줍니다.   */ 
     case 'CREATE_USER':
-      return {
+      return produce(state, draft => {
         //inputs: initialState.inputs,
-        users: state.users.concat(action.user)
-      };
+        /* users: state.users.concat(action.user) */
+
+        draft.users.push(action.user);
+      });
+
     case 'TOGGLE_USER':
-      return {
+      return produce(state, draft => {
+        /* 
         ...state,
         users: state.users.map(user =>
           user.id === action.id ? {...user, active: !user.active} : user)
-      };
+        */
+
+        const user = draft.users.find(user => user.id === action.id);
+        user.active = !user.active;
+      });
     case 'REMOVE_USER':
-      return {
-        ...state,
+      return produce(state, draft => {
+        /* ...state,
         users: state.users.filter(user => user.id != action.id)
-      }; 
+         */ 
+
+         const index = draft.users.findIndex(user => user.id === action.id);
+         draft.users.splice(index, 1);
+      }); 
+      
 
      default:
        return state; 
@@ -197,10 +232,12 @@ filter 배열 내장 함수를 사용하는것이 가장 편합니다.
   /* 
   const { username, email } = state.inputs;
    */
+
   const [{ username, email }, onChange, reset] = useInputs({
     username: '',
     email: ''
   });
+  
 
   /* 
   const onChange = useCallback( e => {
