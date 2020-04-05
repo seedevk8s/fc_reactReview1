@@ -78,12 +78,20 @@ class Counter extends Component {
 
 /* 클래스형 컴포넌트에서 상태를 관리 할 때에는 state 라는 것을 사용합니다. 
 state 를 선언 할 때에는 constructor 내부에서 this.state 를 설정해주시면 됩니다.   */
+/* 클래스형 컴포넌트의 state 는 무조건 객체형태여야 합니다. */
+  /* 
   constructor(props) {
     super(props);
     this.state = {
       counter: 0
     };
   }
+ */
+
+ state = {
+   counter: 0,
+   fixed: 1
+ };
 
   /* 클래스에서 커스텀 메서드를 만들게 될 때에는 
   보통 이름을 handle... 이라고 이름을 짓습니다.  */
@@ -91,6 +99,7 @@ state 를 선언 할 때에는 constructor 내부에서 this.state 를 설정해
   화살표 함수 문법을 사용해서 작성하는 것 입니다. */
 /*   보통 CRA 로 만든 프로젝트에서는 커스텀 메서드를 만들 때 이 방법을 많이 사용합니다. 
   그리고, 가장 편하기도 합니다. */
+  /* 상태를 업데이트해야 할 때에는 this.setState 함수를 사용하면 됩니다. */
   handleInCrease = () => {
     console.log('increase');
     console.log(this);
@@ -106,12 +115,14 @@ state 를 선언 할 때에는 constructor 내부에서 this.state 를 설정해
     });
   }
 
+  /* render 메서드에서 state 를 조회하려면 this.state 를 조회하시면 됩니다. */
   render() {
     return (
     <div>
       <h1>{this.state.counter}</h1>
       <button onClick={this.handleInCrease}>+1</button>
       <button onClick={this.handleDecrease}>-1</button>
+    <p>고정된 값: {this.state.fixed}</p>
     </div>
     );
   }
