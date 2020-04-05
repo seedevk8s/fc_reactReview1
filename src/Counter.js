@@ -59,9 +59,24 @@ function reducer(state, action) {
 render 함수 내부에서 선언은 할 수 있기는 있지만, 
 일반적으로 그렇게 하지는 않고 클래스 안에 커스텀 메서드를 선언합니다.
  */
+/* 
+우리가 만든 메서드들을 각 button 들의 이벤트로 등록하게 되는 과정에서 
+각 메서드와 컴포넌트 인스턴스의 관계가 끊겨버리기 때문입니다.
+ */
 class Counter extends Component {
+/*   이를 해결하기 위해서 할 수 있는 방법은 총 3가지 방법이 있습니다.
+  첫번째는 클래스의 생성자 메서드 constructor 에서 bind 작업을 해주는 것 입니다. */
+  constructor(props) {
+    super(props);
+    this.handleInCrease = this.handleInCrease.bind(this);
+    this.handleDecrease = this.handleDecrease.bind(this);
+  }
+
+  /* 클래스에서 커스텀 메서드를 만들게 될 때에는 
+  보통 이름을 handle... 이라고 이름을 짓습니다.  */
   handleInCrease() {
     console.log('increase');
+    console.log(this);
   }
 
   handleDecrease() {
