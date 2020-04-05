@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-const User = React.memo( function User({ user, onRemove, onToggle }) {
+const User = React.memo( function User({ user/* , onRemove, onToggle */ }) {
 
     /*  useEffect 를 사용 할 때에는 첫번째 파라미터에는 함수, 
     두번째 파라미터에는 의존값이 들어있는 배열 (deps)을 넣습니다. */
@@ -44,10 +44,14 @@ const User = React.memo( function User({ user, onRemove, onToggle }) {
             <b style={{
                 cursor: 'pointer',
                 color: user.active ? 'green' : 'red'
-            }} onClick={() => onToggle(user.id)}>{user.username}</b>
+                    }} 
+                onClick={() => /* onToggle(user.id) */ {}}
+            >
+                {user.username}
+            </b>
             &nbsp;
             <span>{user.email}</span>
-            <button onClick={() => onRemove(user.id)}>삭제</button>
+            <button onClick={() => /* onRemove(user.id) */{}}>삭제</button>
             {/* User 컴포넌트의 삭제 버튼이 클릭 될 때는 
             user.id 값을 앞으로 props 로 받아올 onRemove 함수의 파라미터로 넣어서 
             호출해주어야 합니다. */}
@@ -57,7 +61,7 @@ const User = React.memo( function User({ user, onRemove, onToggle }) {
 
 /* 이 onRemove 함수는 UserList 에서도 전달 받을것이며, 
 이를 그대로 User 컴포넌트에게 전달해줄것입니다. */
-function UserList({ users, onRemove, onToggle }) {
+function UserList({ users/* , onRemove, onToggle */ }) {
 
     return (
         <div>
@@ -66,8 +70,10 @@ function UserList({ users, onRemove, onToggle }) {
                     <User 
                         user={user} 
                         key={user.id} 
+                        /* 
                         onRemove={onRemove}
                         onToggle={onToggle}
+                        */
                     />
                 ))
             }
