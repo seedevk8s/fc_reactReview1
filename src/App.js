@@ -22,7 +22,7 @@ concat, filter, map 등의 함수를 사용해야 합니다. */
 이를 사용하는 것을 권장드립니다. */
 /* 이 라이브러리를 사용 할 땐 다음과 같이 사용합니다.
 우선 코드의 상단에서 immer 를 불러와주어야 합니다. 
-보통 produce 라는 이름으로 불러옵니다. */
+보통 produce 라는 이름으로 불러옵니다. */ 
 import produce from 'immer';
 
 function countActiveUsers(users) {
