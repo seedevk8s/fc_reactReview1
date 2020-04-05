@@ -66,27 +66,50 @@ render 함수 내부에서 선언은 할 수 있기는 있지만,
 class Counter extends Component {
 /*   이를 해결하기 위해서 할 수 있는 방법은 총 3가지 방법이 있습니다.
   첫번째는 클래스의 생성자 메서드 constructor 에서 bind 작업을 해주는 것 입니다. */
+
+  /* 
   constructor(props) {
     super(props);
     this.handleInCrease = this.handleInCrease.bind(this);
     this.handleDecrease = this.handleDecrease.bind(this);
   }
+ */
+
+
+/* 클래스형 컴포넌트에서 상태를 관리 할 때에는 state 라는 것을 사용합니다. 
+state 를 선언 할 때에는 constructor 내부에서 this.state 를 설정해주시면 됩니다.   */
+  constructor(props) {
+    super(props);
+    this.state = {
+      counter: 0
+    };
+  }
 
   /* 클래스에서 커스텀 메서드를 만들게 될 때에는 
   보통 이름을 handle... 이라고 이름을 짓습니다.  */
-  handleInCrease() {
+/*   또 다른 방법은 커스텀 메서드를 선언 할 때 
+  화살표 함수 문법을 사용해서 작성하는 것 입니다. */
+/*   보통 CRA 로 만든 프로젝트에서는 커스텀 메서드를 만들 때 이 방법을 많이 사용합니다. 
+  그리고, 가장 편하기도 합니다. */
+  handleInCrease = () => {
     console.log('increase');
     console.log(this);
+    this.setState({
+      counter: this.state.counter + 1
+    });
   }
 
-  handleDecrease() {
+  handleDecrease = () => {
     console.log('decrease');
+    this.setState({
+      counter: this.state.counter - 1
+    });
   }
 
   render() {
     return (
     <div>
-      <h1>0</h1>
+      <h1>{this.state.counter}</h1>
       <button onClick={this.handleInCrease}>+1</button>
       <button onClick={this.handleDecrease}>-1</button>
     </div>
