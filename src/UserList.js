@@ -1,4 +1,9 @@
-import React, { useEffect } from 'react';
+/* User 컴포넌트에서 바로 dispatch 를 사용 할건데요, 
+그렇게 하기 위해서는 useContext 라는 Hook 을 사용해서 
+우리가 만든 UserDispatch Context 를 조회해야합니다. */
+
+import React, { useEffect, useContext } from 'react';
+import { UserDispatch } from './App';
 
 const User = React.memo( function User({ user/* , onRemove, onToggle */ }) {
 
@@ -38,6 +43,7 @@ const User = React.memo( function User({ user/* , onRemove, onToggle */ }) {
                             그리고, deps 안에 특정 값이 있다면 
                             언마운트시에도 호출이되고, 값이 바뀌기 직전에도 호출이 됩니다. */
 
+    const dispatch = useContext(UserDispatch);
 
      return (
         <div>
@@ -45,13 +51,23 @@ const User = React.memo( function User({ user/* , onRemove, onToggle */ }) {
                 cursor: 'pointer',
                 color: user.active ? 'green' : 'red'
                     }} 
-                onClick={() => /* onToggle(user.id) */ {}}
+                onClick={() => /* onToggle(user.id) */ 
+                    {
+                    dispatch({
+                        type: 'TOGGLE_USER',
+                        id: user.id
+                        });
+                    }
+                }
             >
                 {user.username}
             </b>
             &nbsp;
             <span>{user.email}</span>
-            <button onClick={() => /* onRemove(user.id) */{}}>삭제</button>
+            <button onClick={() => /* onRemove(user.id) */{
+                dispatch({ type: 'REMOVE_USER', id: user.id});
+
+            }}>삭제</button>
             {/* User 컴포넌트의 삭제 버튼이 클릭 될 때는 
             user.id 값을 앞으로 props 로 받아올 onRemove 함수의 파라미터로 넣어서 
             호출해주어야 합니다. */}
