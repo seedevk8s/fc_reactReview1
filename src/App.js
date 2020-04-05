@@ -3,7 +3,7 @@
 /* 만약에 컴포넌트에서 관리하는 값이 여러개가 되어서 상태의 구조가 복잡해진다면 
 useReducer로 관리하는 것이 편해질 수도 있습니다. */
 
-import React, { useRef, useState, useMemo, useCallback, useReducer } from 'react';
+import React, { useRef, useMemo, useCallback, useReducer } from 'react';
 import UserList from './UserList';
 import CreateUser from './CreateUser';
 import useInputs from './hooks/useInputs';
@@ -83,6 +83,11 @@ function reducer(state, action) {
   return state;
 }
 
+/* 리액트의 Context API 를 사용하면, 
+프로젝트 안에서 전역적으로 사용 할 수 있는 값을 관리 할 수 있습니다. */
+/* Context 를 만들 땐 다음과 같이 React.createContext() 라는 함수를 사용합니다. */
+// UserDispatch 라는 이름으로 내보내줍니다.
+export const UserDispatch = React.createContext(null);
 
 function App() {
 
@@ -241,8 +246,16 @@ filter 배열 내장 함수를 사용하는것이 가장 편합니다.
 
   const count = useMemo(() => countActiveUsers(users), [users] ) ;
 
+
+  /* Context 를 만들면, Context 안에 Provider 라는 컴포넌트가 들어있는데 
+  이 컴포넌트를 통하여 Context 의 값을 정할 수 있습니다. 
+  이 컴포넌트를 사용할 때, value 라는 값을 설정해주면 됩니다. */
+  /* 이렇게 설정해주고 나면 Provider 에 의하여 감싸진 컴포넌트 중 어디서든지 
+  우리가 Context 의 값을 다른 곳에서 바로 조회해서 사용 할 수 있습니다. */
+  /* 우리가 UserDispatch 라는 Context 를 만들어서, 
+  어디서든지 dispatch 를 꺼내 쓸 수 있도록 준비를 해준 것입니다. */
   return (
-    <>
+    <UserDispatch.Provider value={dispatch}>
       <CreateUser 
         
         username={username}
@@ -261,7 +274,7 @@ filter 배열 내장 함수를 사용하는것이 가장 편합니다.
            */
       />      
       <div>활성사용자 수 : {count}</div>
-    </>
+    </UserDispatch.Provider>
   );
 }
 
